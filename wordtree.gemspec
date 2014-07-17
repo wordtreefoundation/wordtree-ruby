@@ -19,8 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "virtus"
-  spec.add_dependency "preambular", "0.3"
-  spec.add_dependency "archdown", ">= 0.4"
+  spec.add_dependency "preamble", ">= 0.0.3"
+  spec.add_dependency "archivist-client"
+  spec.add_dependency "retriable"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"

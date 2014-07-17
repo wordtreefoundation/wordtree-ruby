@@ -1,45 +1,41 @@
-require 'virtus'
 require 'fileutils'
-require 'archdown'
+
+require 'wordtree/archdown'
+require 'wordtree/library_locator'
 
 module WordTree
   class Library
-    include Virtus.model
 
-    attribute :path
+    FILE_TYPES = {
+      :raw => "%s.md"
+    }
 
-    # A file_id is a string that uniquely identifies a resource in the library.
-    # For instance, if the book comes from archive.org, it is the archive.org
-    # unique ID (e.g. "firstbooknapole00gruagoog").
-    def path_for_file_id(file_id)
-      File.join(path, file_id[0..1], file_id[-2..-1], file_id)
+    # The file path to the root of the library directory, e.g. /data/library
+    attr_reader :root
+
+    def initialize(root)
+      @root = root
     end
 
-    def mkdir
-      FileUtils.mkdir_p(path)
+    # returns the full path of a book's subdirectory within the library
+    # Accepts either a String or a LibraryLocator object
+    def dir_of(book_id)
+      File.expand_path(LibraryLocator.identity(book_id).relpath, root)
     end
 
-    def archive_org_download_book(file_id, &block)
-      archive_org_download({
-        :filters => ["identifier:firstbooknapole00gruagoog"]
-      }, &block)
+    def path_to(book_id, type=:raw)
+      File.join(dir_of(book_id), file_type(book_id, type))
     end
 
-    def archive_org_download_range(start_year, end_year, &block)
-      archive_org_download({
-        :start_year => start_year,
-        :end_year   => end_year
-      }, &block)
+    def file_type(book_id, type=:raw)
+      locator = LibraryLocator.identity(book_id)
+      FILE_TYPES[type] % locator.id
     end
 
-    def archive_org_download(conditions, &block)
-      download = Archdown::Download.new(path, conditions)
-      [].tap do |archive_org_ids|
-        download.go! do |metadata, librarian|
-          block.call(metadata, librarian)
-          archive_org_ids << metadata["archive_org_id"]
-        end
-      end
+    # Create all subdirs up to the location where a book is stored
+    # Accepts either a String or a LibraryLocator object
+    def mkdir(book_id)
+      FileUtils.mkdir_p(dir_of(book_id))
     end
   end
 end
