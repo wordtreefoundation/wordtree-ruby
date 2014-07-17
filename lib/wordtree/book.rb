@@ -28,7 +28,7 @@ module WordTree
     end
 
     def metadata
-      attributes.select{ |k,v| !v.nil? && k != :content }
+      attributes.select{ |k,v| !v.nil? && k != :content && k != :id }
     end
 
     def clean_content

@@ -1,24 +1,33 @@
 # Wordtree
 
-TODO: Write a gem description
+This is the WordTree ruby gem for text analysis.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'wordtree'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install wordtree
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'wordtree'
+
+    library = WordTree::Library.new("/tmp/library")
+    librarian = WordTree::Librarian.new(library)
+
+Find a book in your on-disk "library":
+
+    book = librarian.find('firstbooknapole00gruagoog')
+    book.metadata
+    book.content
+
+Modify and save a book to your "library":
+
+    book.year = 2014
+    librarian.save(book)
+
+Download a book from Archive.org to your "library":
+
+    book_id = librarian.archive_org_get('latewarbetween_00hunt')
+
 
 ## Contributing
 

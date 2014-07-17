@@ -40,7 +40,7 @@ describe WordTree::Librarian do
       tmp_librarian.save(book)
 
       updated = Preamble.load(tmp_library.path_to("book"))
-      expect(updated.metadata).to eq({:id => "book", :year => 1800, :source => "test"})
+      expect(updated.metadata).to eq({:year => 1800, :source => "test"})
       expect(updated.content).to eq("Book with content.")
     end
 
