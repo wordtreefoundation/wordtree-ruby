@@ -10,7 +10,7 @@ describe WordTree::Librarian do
 
   it "downloads an archive.org book" do
     VCR.use_cassette('archive_org_download_book') do
-      librarian.archive_org_get_book("firstbooknapole00gruagoog")
+      librarian.archive_org_get("firstbooknapole00gruagoog")
       book = librarian.find("firstbooknapole00gruagoog")
       expect(book.year).to eq(1809)
     end

@@ -1624,4 +1624,83 @@ http_interactions:
         )","wt":"json","rows":"50"}},"response":{"numFound":1,"start":50,"docs":[]}}'
     http_version: 
   recorded_at: Thu, 17 Jul 2014 01:35:20 GMT
+- request:
+    method: get
+    uri: http://archive.org/advancedsearch.php?fl%5B0%5D=identifier&fl%5B1%5D=title&fl%5B2%5D=creator&fl%5B3%5D=date&fl%5B4%5D=language&fl%5B5%5D=mediattype&output=json&page=1&q=mediatype:texts%20AND%20-mediatype:collection%20AND%20(language:eng%20OR%20language:English)%20AND%20identifier:firstbooknapole00gruagoog&rows=50&sort%5B0%5D=date%20asc
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - ! '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.1.19
+      Date:
+      - Thu, 17 Jul 2014 04:29:38 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - PHP/5.3.10-1ubuntu3.2
+    body:
+      encoding: US-ASCII
+      string: ! '{"responseHeader":{"status":0,"QTime":43,"params":{"json.wrf":"","qin":"mediatype:texts
+        AND -mediatype:collection AND (language:eng OR language:English) AND identifier:firstbooknapole00gruagoog","fl":"identifier,title,creator,date,language,mediattype","sort":"date
+        asc","indent":"","start":"0","q":"mediatype:texts AND -mediatype:collection
+        AND ( language:eng OR language:English ) AND identifier:firstbooknapole00gruagoog","wt":"json","rows":"50"}},"response":{"numFound":1,"start":0,"docs":[{"title":"The
+        First Book of Napoleon, the Tyrant of the Earth: Written in the 5813th Year
+        of the World ...","date":"1809-01-01T00:00:00Z","identifier":"firstbooknapole00gruagoog","language":["English"],"creator":["Modeste
+        Gruau"]}]}}'
+    http_version: 
+  recorded_at: Thu, 17 Jul 2014 04:29:37 GMT
+- request:
+    method: get
+    uri: http://archive.org/advancedsearch.php?fl%5B0%5D=identifier&fl%5B1%5D=title&fl%5B2%5D=creator&fl%5B3%5D=date&fl%5B4%5D=language&fl%5B5%5D=mediattype&output=json&page=2&q=mediatype:texts%20AND%20-mediatype:collection%20AND%20(language:eng%20OR%20language:English)%20AND%20identifier:firstbooknapole00gruagoog&rows=50&sort%5B0%5D=date%20asc
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - ! '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.1.19
+      Date:
+      - Thu, 17 Jul 2014 04:29:39 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - PHP/5.3.10-1ubuntu3.2
+    body:
+      encoding: US-ASCII
+      string: ! '{"responseHeader":{"status":0,"QTime":0,"params":{"json.wrf":"","qin":"mediatype:texts
+        AND -mediatype:collection AND (language:eng OR language:English) AND identifier:firstbooknapole00gruagoog","fl":"identifier,title,creator,date,language,mediattype","sort":"date
+        asc","indent":"","start":"50","q":"mediatype:texts AND -mediatype:collection
+        AND ( language:eng OR language:English ) AND identifier:firstbooknapole00gruagoog","wt":"json","rows":"50"}},"response":{"numFound":1,"start":50,"docs":[]}}'
+    http_version: 
+  recorded_at: Thu, 17 Jul 2014 04:29:38 GMT
 recorded_with: VCR 2.9.2

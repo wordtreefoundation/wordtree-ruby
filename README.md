@@ -13,6 +13,12 @@ This is the WordTree ruby gem for text analysis.
     library = WordTree::Library.new("/tmp/library")
     librarian = WordTree::Librarian.new(library)
 
+Download a book from Archive.org to your "library":
+
+    book_ids = librarian.archive_org_get(
+      'latewarbetween_00hunt',
+      'firstbooknapole00gruagoog')
+
 Find a book in your on-disk "library":
 
     book = librarian.find('firstbooknapole00gruagoog')
@@ -24,9 +30,6 @@ Modify and save a book to your "library":
     book.year = 2014
     librarian.save(book)
 
-Download a book from Archive.org to your "library":
-
-    book_id = librarian.archive_org_get('latewarbetween_00hunt')
 
 
 ## Contributing
