@@ -30,6 +30,11 @@ Modify and save a book to your "library":
     book.year = 2014
     librarian.save(book)
 
+Clean the text:
+
+    book.clean_content
+    # returns the book without punctuation
+
 
 
 ## Contributing
