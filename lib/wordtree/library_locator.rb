@@ -1,5 +1,16 @@
 module WordTree
-  # A class that converts from a book ID to a location within the library
+  # A class that converts from a book ID to a location within the library, e.g.
+  #
+  # "firstbooknapole00gruagoog"
+  #
+  #   becomes
+  #
+  # "fi/og/firstbooknapole00gruagoog/"
+  #
+  #   or, in context of the full path:
+  #
+  # [/data/library/] "fi/og/firstbooknapole00gruagoog/" [firstbooknapole00gruagoog.md]
+  #
   class LibraryLocator
     # The book ID to locate
     attr_reader :id

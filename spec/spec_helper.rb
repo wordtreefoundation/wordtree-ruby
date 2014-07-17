@@ -4,11 +4,18 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'vcr'
 
 module Fixtures
   def fixture(name)
     File.join(File.dirname(__FILE__), 'fixtures', name)
   end
+end
+
+VCR.configure do |c|
+  include Fixtures
+  c.cassette_library_dir = fixture('cassettes')
+  c.hook_into :webmock
 end
 
 RSpec.configure do |config|

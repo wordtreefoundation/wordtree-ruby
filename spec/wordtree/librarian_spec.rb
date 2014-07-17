@@ -8,7 +8,16 @@ describe WordTree::Librarian do
   let(:library) { WordTree::Library.new(root) }
   let(:librarian) { WordTree::Librarian.new(library) }
 
+  it "downloads an archive.org book" do
+    VCR.use_cassette('archive_org_download_book') do
+      librarian.archive_org_get_book("firstbooknapole00gruagoog")
+      book = librarian.find("firstbooknapole00gruagoog")
+      expect(book.year).to eq(1809)
+    end
+  end
+
   context "with fixture library" do
+    # Need a read-only library with fixtures in it for some tests
     let(:root) { fixture("library") }
 
     it "loads book from disk" do

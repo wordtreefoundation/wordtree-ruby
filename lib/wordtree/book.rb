@@ -1,4 +1,5 @@
 require 'virtus'
+require 'wordtree/text_utils'
 
 module WordTree
   class Book
@@ -11,7 +12,10 @@ module WordTree
     attribute :year, Integer
     attribute :source, String
     attribute :status, String
+    # Size of the content in bytes
     attribute :size_bytes, Integer
+    # A simhash (locality-sensitive hash) of the content
+    attribute :simhash, String
 
     attribute :content, String
 
@@ -25,6 +29,10 @@ module WordTree
 
     def metadata
       attributes.select{ |k,v| !v.nil? && k != :content }
+    end
+
+    def clean_content
+      TextUtils.clean_text(content)
     end
   end
 end

@@ -34,16 +34,19 @@ module WordTree
       }, &block)
     end
 
+    # Downloads a set of books to the on-disk library and
+    # returns a list of book_ids
     def archive_org_get(conditions, &block)
       archdown = Archdown.new
       [].tap do |archive_org_ids|
-        archdown.download_all do |metadata, content, failure|
+        archdown.download_all(conditions) do |metadata, content, failure|
           if failure
             #TODO: logging
             $stderr.puts "Unable to download from archive.org: #{failure}"
           else
-            book = Book.create(metadata, content)
+            book = Book.create(metadata["archive_org_id"], metadata, content)
             save(book)
+            yield book, self if block_given?
             archive_org_ids << book.id
           end
         end

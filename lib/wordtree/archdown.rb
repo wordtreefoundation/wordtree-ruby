@@ -10,14 +10,14 @@ module WordTree
     end
 
     def metadata_for(archivist_book)
+      author = archivist_book.creators ? archivist_book.creators.join('; ') : nil
       {
-        'id'             => book.identifier,
-        'title'          => book.title,
-        'author'         => book.creators ? book.creators.join('; ') : nil,
-        'year'           => book.date.year,
-        'source'         => "http://archive.org/details/#{book.identifier}",
+        'title'          => archivist_book.title,
+        'author'         => author,
+        'year'           => archivist_book.date.year,
+        'source'         => "http://archive.org/details/#{archivist_book.identifier}",
         'status'         => "OCR ONLY",
-        'archive_org_id' => book.identifier,
+        'archive_org_id' => archivist_book.identifier,
       }
     end
 

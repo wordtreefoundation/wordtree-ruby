@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "virtus"
   spec.add_dependency "preamble", ">= 0.0.3"
-  spec.add_dependency "archivist-client"
+  spec.add_dependency "archivist-client", ">= 0.1.7"
   spec.add_dependency "retriable"
 
   spec.add_development_dependency "bundler", "~> 1.3"
@@ -29,4 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "vcr"
+  spec.add_development_dependency "webmock"
 end
