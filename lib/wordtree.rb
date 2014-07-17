@@ -1,5 +1,6 @@
 require "wordtree/version"
+require "wordtree/book"
 
-module Wordtree
-  # Your code goes here...
-end
+require "wordtree/library"
+require "wordtree/librarian"
+require "wordtree/library_locator"
