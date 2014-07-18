@@ -1,4 +1,6 @@
 require 'virtus'
+require 'simhash'
+
 require 'wordtree/text_utils'
 
 module WordTree
@@ -13,9 +15,9 @@ module WordTree
     attribute :source, String
     attribute :status, String
     # Size of the content in bytes
-    attribute :size_bytes, Integer
+    attribute :size_bytes, Integer, :default => :content_size
     # A simhash (locality-sensitive hash) of the content
-    attribute :simhash, String
+    attribute :simhash, Integer, :default => :calculate_simhash
 
     attribute :content, String
 
@@ -31,8 +33,16 @@ module WordTree
       attributes.select{ |k,v| !v.nil? && k != :content && k != :id }
     end
 
-    def clean_content
+    def content_clean
       TextUtils.clean_text(content)
+    end
+
+    def content_size
+      content ? content.size : nil
+    end
+
+    def calculate_simhash
+      content_clean.simhash(:split_by => /\s/)
     end
   end
 end
