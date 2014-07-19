@@ -41,6 +41,7 @@ describe WordTree::Disk::Librarian do
 
       updated = Preamble.load(tmp_library.path_to("book"))
       expect(updated.metadata).to eq(
+        :id => "book",
         :year => 1800,
         :source => "test",
         :simhash => 14921967289891934128,

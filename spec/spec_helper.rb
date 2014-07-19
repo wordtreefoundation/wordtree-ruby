@@ -12,6 +12,12 @@ module Fixtures
   end
 end
 
+RDB_CONFIG = {
+  :host => "localhost",
+  :port => 28015,
+  :db   => "test"
+}
+
 VCR.configure do |c|
   include Fixtures
   c.cassette_library_dir = fixture('cassettes')
