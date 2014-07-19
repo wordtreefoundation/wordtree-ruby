@@ -1,12 +1,12 @@
-require_relative '../spec_helper'
+require_relative '../../spec_helper'
 require 'tmpdir'
 require 'preamble'
-require 'wordtree/librarian'
+require 'wordtree/disk/librarian'
 
-describe WordTree::Librarian do
+describe WordTree::Disk::Librarian do
   let(:root) { Dir.mktmpdir }
-  let(:library) { WordTree::Library.new(root) }
-  let(:librarian) { WordTree::Librarian.new(library) }
+  let(:library) { WordTree::Disk::Library.new(root) }
+  let(:librarian) { WordTree::Disk::Librarian.new(library) }
 
   it "downloads an archive.org book" do
     VCR.use_cassette('archive_org_download_book') do
@@ -29,8 +29,8 @@ describe WordTree::Librarian do
 
     it "saves to disk (yaml, content)" do
       tmp_root = Dir.mktmpdir
-      tmp_library = WordTree::Library.new(tmp_root)
-      tmp_librarian = WordTree::Librarian.new(tmp_library)
+      tmp_library = WordTree::Disk::Library.new(tmp_root)
+      tmp_librarian = WordTree::Disk::Librarian.new(tmp_library)
 
       book = librarian.find("book")
 
@@ -40,7 +40,11 @@ describe WordTree::Librarian do
       tmp_librarian.save(book)
 
       updated = Preamble.load(tmp_library.path_to("book"))
-      expect(updated.metadata).to eq({:year => 1800, :source => "test"})
+      expect(updated.metadata).to eq(
+        :year => 1800,
+        :source => "test",
+        :simhash => 14921967289891934128,
+        :size_bytes => 17)
       expect(updated.content).to eq("Book with content.")
     end
 

@@ -1,10 +1,10 @@
 require 'spec_helper'
-require 'wordtree/library'
+require 'wordtree/disk/library'
 require 'tmpdir'
 
-describe WordTree::Library do
+describe WordTree::Disk::Library do
   let(:root) { Dir.mktmpdir('library') }
-  let(:library) { WordTree::Library.new(root) }
+  let(:library) { WordTree::Disk::Library.new(root) }
 
   it "initializes with path" do
     expect(library.root).to eq(root)

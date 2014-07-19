@@ -14,6 +14,6 @@ describe WordTree::Book do
 
   it "can return cleaned content" do
     book = WordTree::Book.create("book", {}, "Wi&ld\nContent!")
-    expect(book.clean_content).to eq("wild content\n")
+    expect(book.content_clean).to eq("wild content\n")
   end
 end

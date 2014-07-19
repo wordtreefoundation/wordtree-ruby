@@ -42,7 +42,7 @@ module WordTree
     end
 
     def calculate_simhash
-      content_clean.simhash(:split_by => /\s/)
+      content ? content_clean.simhash(:split_by => /\s/) : nil
     end
   end
 end
