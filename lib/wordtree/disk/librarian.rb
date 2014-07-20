@@ -14,7 +14,7 @@ module WordTree
 
       def find(book_id)
         begin
-          retrieved = Preamble.load(library.path_to(book_id))
+          retrieved = Preamble.load(library.path_to(book_id), :external_encoding => "utf-8")
           Book.create(book_id, retrieved.metadata, retrieved.content)
         rescue Errno::ENOENT
           nil
