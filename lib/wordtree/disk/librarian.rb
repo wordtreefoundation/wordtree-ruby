@@ -13,13 +13,17 @@ module WordTree
       end
 
       def find(book_id)
-        retrieved = Preamble.load(library.path_to(book_id))
-        Book.create(book_id, retrieved.metadata, retrieved.content)
+        begin
+          retrieved = Preamble.load(library.path_to(book_id))
+          Book.create(book_id, retrieved.metadata, retrieved.content)
+        rescue Errno::ENOENT
+          nil
+        end
       end
 
       def save(book)
         library.mkdir(book.id)
-        Preamble.new(book.metadata, book.content).save(library.path_to(book.id))
+        Preamble.new(book.metadata, book.content || "").save(library.path_to(book.id))
       end
 
       def archive_org_get(*book_ids, &block)
