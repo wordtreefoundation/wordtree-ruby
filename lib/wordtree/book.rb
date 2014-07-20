@@ -33,8 +33,8 @@ module WordTree
       attributes.select{ |k,v| !v.nil? && k != :content }
     end
 
-    def content_clean
-      TextUtils.clean_text(content)
+    def content_clean(wrap=120)
+      TextUtils.clean_text(content, wrap)
     end
 
     def content_size
