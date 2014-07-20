@@ -1,6 +1,8 @@
 require "wordtree/version"
 require "wordtree/book"
 
-require "wordtree/library"
-require "wordtree/librarian"
-require "wordtree/library_locator"
+require "wordtree/db/librarian"
+
+require "wordtree/disk/library"
+require "wordtree/disk/librarian"
+require "wordtree/disk/library_locator"
