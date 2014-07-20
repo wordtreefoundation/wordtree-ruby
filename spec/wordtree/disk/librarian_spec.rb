@@ -20,11 +20,18 @@ describe WordTree::Disk::Librarian do
     # Need a read-only library with fixtures in it for some tests
     let(:root) { fixture("library") }
 
-    it "loads book from disk" do
-      book = librarian.find("book")
-      expect(book.id).to eq("book")
-      expect(book.year).to eq(1800)
-      expect(book.content).to eq("Book with content")
+    describe "#find" do
+      it "returns nil if the book is not found" do
+        book = librarian.find("nobook")
+        expect(book).to be_nil
+      end
+
+      it "loads book from disk" do
+        book = librarian.find("book")
+        expect(book.id).to eq("book")
+        expect(book.year).to eq(1800)
+        expect(book.content).to eq("Book with content")
+      end
     end
 
     it "saves to disk (yaml, content)" do
