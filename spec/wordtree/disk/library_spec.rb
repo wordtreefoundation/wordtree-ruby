@@ -20,4 +20,15 @@ describe WordTree::Disk::Library do
     library.mkdir(book_id)
     expect(File.exist?(library.dir_of(book_id))).to be_truthy
   end
+
+  context "with fixture library" do
+    let(:root) { fixture('library') }
+
+    describe "#each" do
+      it "iterates through each book" do
+        books = library.map.to_a
+        expect(books.size).to eq 2
+      end
+    end
+  end
 end

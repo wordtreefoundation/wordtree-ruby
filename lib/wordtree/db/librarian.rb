@@ -4,9 +4,15 @@ require 'wordtree/book'
 module WordTree
   module DB
     class Librarian
-      def initialize(rethinkdb_connection)
-        @rdb = rethinkdb_connection
+      # @connection can be either a Hash or a RethinkDB::Connection object
+      # If a hash, it uses keys :host, :port, and :db
+      def initialize(connection)
         @r = RethinkDB::RQL.new
+        if connection.is_a? Hash
+          @rdb = @r.connect(connection)
+        else
+          @rdb = connection
+        end
       end
 
       def find(book_id)

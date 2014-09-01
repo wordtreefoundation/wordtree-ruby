@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'find'
 
 require 'wordtree/archdown'
 require 'wordtree/disk/library_locator'
@@ -6,6 +7,7 @@ require 'wordtree/disk/library_locator'
 module WordTree
   module Disk
     class Library
+      include Enumerable
 
       FILE_TYPES = {
         :raw => "%s.md"
@@ -38,6 +40,23 @@ module WordTree
       def mkdir(book_id)
         FileUtils.mkdir_p(dir_of(book_id))
       end
+
+      # Breadth-first search of the directory structure, operating on each book
+      def each(file_suffix_re=/\.(md|txt)$/, &block)
+        Find.find(@root) do |path|
+          if FileTest.directory?(path)
+            if File.basename(path)[0] == ?.
+              # Don't look any further into this directory.
+              Find.prune
+            else
+              next
+            end
+          elsif path =~ file_suffix_re
+            yield path
+          end
+        end
+      end
+
     end
   end
 end

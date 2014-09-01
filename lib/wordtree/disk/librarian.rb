@@ -6,10 +6,18 @@ require 'wordtree/archdown'
 module WordTree
   module Disk
     class Librarian
+      include Enumerable
+
       attr_reader :library
 
+      # @library can be either a string (the path of the library) or a
+      # WordTree::Disk::Library object
       def initialize(library)
-        @library = library
+        if library.is_a? String
+          @library = WordTree::Disk::Library.new(library)
+        else
+          @library = library
+        end
       end
 
       def find(book_id)
@@ -18,6 +26,13 @@ module WordTree
           Book.create(book_id, retrieved.metadata, retrieved.content)
         rescue Errno::ENOENT
           nil
+        end
+      end
+
+      def each(file_suffix_re=/\.(md|txt)$/, &block)
+        library.each(file_suffix_re) do |path|
+          retrieved = Preamble.load(path, :external_encoding => "utf-8")
+          yield Book.new(retrieved.metadata.merge("content" => retrieved.content))
         end
       end
 

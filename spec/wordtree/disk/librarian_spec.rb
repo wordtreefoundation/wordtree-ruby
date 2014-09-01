@@ -34,6 +34,13 @@ describe WordTree::Disk::Librarian do
       end
     end
 
+    describe "#each" do
+      it "iterates through each book" do
+        book_sizes = librarian.map{ |book| book.size_bytes }
+        expect(book_sizes).to contain_exactly(17, 23)
+      end
+    end
+
     it "saves to disk (yaml, content)" do
       tmp_root = Dir.mktmpdir
       tmp_library = WordTree::Disk::Library.new(tmp_root)
@@ -49,6 +56,7 @@ describe WordTree::Disk::Librarian do
       updated = Preamble.load(tmp_library.path_to("book"))
       expect(updated.metadata).to eq(
         :id => "book",
+        :archive_org_id => "book",
         :year => 1800,
         :source => "test",
         :simhash => 14921967289891934128,
