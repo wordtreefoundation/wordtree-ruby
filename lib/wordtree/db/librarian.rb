@@ -21,7 +21,7 @@ module WordTree
       end
 
       def save(book)
-        result = @r.table('books').insert(book.metadata, :upsert => true).run(@rdb)
+        result = @r.table('books').insert(book.metadata, :conflict => :update).run(@rdb)
         return result["replaced"] == 1 || result["inserted"] == 1 || result["unchanged"] == 1
       end
 
