@@ -16,6 +16,8 @@ module WordTree
       # The book ID to locate
       attr_reader :id
 
+      NotPath = Class.new(StandardError)
+      
       # Construct a LibraryLocator from a string (book ID)
       def initialize(id)
         @id = id
@@ -40,6 +42,11 @@ module WordTree
       # Constructor that is as willing to use a String as it is a LibraryLocator
       def self.identity(id)
         id.is_a?(LibraryLocator) ? id : new(id)
+      end
+
+      def self.id_from_path(path)
+        raise NotPath, "not a path" if path.nil? or !path.is_a?(String)
+        File.basename(path).sub(/\.[^\.]+$/, '')
       end
     end
   end

@@ -52,7 +52,7 @@ module WordTree
               next
             end
           elsif path =~ file_suffix_re
-            yield path
+            yield path, LibraryLocator.id_from_path(path)
           end
         end
       end
