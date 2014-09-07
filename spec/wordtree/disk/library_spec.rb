@@ -31,4 +31,10 @@ describe WordTree::Disk::Library do
       end
     end
   end
+
+  describe "#file_type" do
+    it "interpolates n" do
+      expect(library.file_type("abc", :ngrams, :n => 1)).to eq("abc.1grams.json")
+    end
+  end
 end

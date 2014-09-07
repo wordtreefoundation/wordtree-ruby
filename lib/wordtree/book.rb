@@ -21,6 +21,11 @@ module WordTree
 
     attribute :content, String
 
+    def initialize(*args)
+      super
+      @ngrams = {}
+    end
+
     def self.create(id, metadata, content)
       new(metadata.merge("id" => id, "content" => content))
     end
@@ -34,11 +39,43 @@ module WordTree
     end
 
     def content_clean(wrap=120)
-      TextUtils.clean_text(content, wrap)
+      if @content_clean_wrap != wrap
+        # Memoize content_clean (using last wrap size)
+        @content_clean_wrap = wrap
+        @content_clean = TextUtils.clean_text(content, wrap)
+      end
+      @content_clean
     end
 
     def content_size
       content ? content.size : nil
+    end
+
+    def each_ngram(n=1, &block)
+      TextUtils.each_ngram(content_clean, n, &block)
+    end
+
+    def set_ngrams(n, lookup)
+      raise ArgumentError, "must be a Hash" unless lookup.is_a?(Hash)
+      @ngrams[n] = lookup
+    end
+
+    def ngrams(n=1)
+      # Memoize ngram counts
+      @ngrams[n] ||= count_ngrams(n)
+    end
+
+    def all_ngrams
+      @ngrams
+    end
+
+    def count_ngrams(n=1)
+      {}.tap do |tally|
+        each_ngram(n) do |ngram|
+          tally[ngram] ||= 0
+          tally[ngram] += 1
+        end
+      end
     end
 
     def calculate_simhash

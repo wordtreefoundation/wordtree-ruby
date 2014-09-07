@@ -10,7 +10,8 @@ module WordTree
       include Enumerable
 
       FILE_TYPES = {
-        :raw => "%s.md"
+        :raw => "%{id}.md",
+        :ngrams => "%{id}.%{n}grams.json"
       }
 
       # The file path to the root of the library directory, e.g. /data/library
@@ -26,13 +27,15 @@ module WordTree
         File.expand_path(LibraryLocator.identity(book_id).relpath, root)
       end
 
-      def path_to(book_id, type=:raw)
-        File.join(dir_of(book_id), file_type(book_id, type))
+      def path_to(book_id, type=:raw, opts={})
+        File.join(dir_of(book_id), file_type(book_id, type, opts))
       end
 
-      def file_type(book_id, type=:raw)
+      def file_type(book_id, type=:raw, opts={})
         locator = LibraryLocator.identity(book_id)
-        FILE_TYPES[type] % locator.id
+        template = FILE_TYPES[type]
+        raise ArgumentError, "unable to find file type template #{type.inspect}" if template.nil?
+        template % {:id => locator.id}.merge(opts)
       end
 
       # Create all subdirs up to the location where a book is stored

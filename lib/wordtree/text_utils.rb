@@ -1,3 +1,5 @@
+require 'strscan'
+
 module WordTree
   module TextUtils
     def self.split_near(text, split_index)
@@ -34,9 +36,12 @@ module WordTree
       _dash = '-'.ord
       _space = ' '.ord
       _newline = "\n".ord
+      _period = '.'.ord
+      _question = '?'.ord
 
       join_lines = false
       just_added_space = false
+      just_added_period = false
       line_length = 0
       input.each_char do |c|
         c = c.ord
@@ -44,17 +49,28 @@ module WordTree
         c -= 32 if (c >= _A && c <= _Z)
         # Change newlines to spaces
         c = _space if c == _newline
+        # Change question marks to periods (i.e. both count as sentence boundaries)
+        c = _period if c == _question
 
         if c == _dash
           # In case of a dash, set the scoop-spaces-up flag
           join_lines = true
         elsif join_lines && (c == _space)
           # ignore
+        elsif (c == _period) && !just_added_period
+          if !just_added_space
+            output << _space.chr
+          end
+          output << c.chr
+          just_added_period = true
+          just_added_space = true
         elsif (c >= _a && c <= _z) || (c == _space && !just_added_space)
           # Add letters and spaces
+          output << _space.chr if just_added_period
           output << c.chr
           line_length += 1
           just_added_space = (c == _space)
+          just_added_period = false
           join_lines = false
         end
       end
@@ -68,6 +84,21 @@ module WordTree
       wrapped_output << remainder + "\n" unless remainder.empty?
 
       return wrapped_output
+    end
+
+    def self.each_ngram(input, n=1, &block)
+      onegram_re = /([^ \n]+[ \n])/
+      ngram_re = /([^ \n]+[ \n]){#{n},#{n}}/
+      s = StringScanner.new(input)
+      while !s.eos?
+        if words = s.scan(ngram_re)
+          yield words.rstrip.tr("\n", " ") if block_given?
+          # Move back to beginning of n-word sequence
+          s.unscan
+        end
+        # Move forward one word
+        s.scan(onegram_re)
+      end
     end
   end
 end

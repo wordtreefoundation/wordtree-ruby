@@ -33,8 +33,8 @@ describe WordTree::TextUtils do
   end
 
   context "#clean_text" do
-    let(:sample_text) { "This, [here]  is awesome, right?" }
     it "wraps" do
+      sample_text = "This, [here]  is awesome, right"
       cleaned = WordTree::TextUtils.clean_text(sample_text, 10)
       expect(cleaned).to eq("this here\nis awesome\nright\n")
 
@@ -45,10 +45,36 @@ describe WordTree::TextUtils do
       expect(cleaned).to eq("this here is awesome right\n")
     end
 
-    let(:sample_dash) { "What-\never\ndo you\n mean?"}
     it "joins lines ending in -" do
-      cleaned = WordTree::TextUtils.clean_text(sample_dash, 10)
-      expect(cleaned).to eq("whatever\ndo you\nmean\n")
+      sample_text = "What-\never\ndo you\n mean?"
+      cleaned = WordTree::TextUtils.clean_text(sample_text, 10)
+      expect(cleaned).to eq("whatever\ndo you\nmean .\n")
+    end
+
+    it "does not ignore sentence boundaries" do
+      sample_text = "This is a sentence. And so is this? Keep the dots."
+      cleaned = WordTree::TextUtils.clean_text(sample_text, 150)
+      expect(cleaned).to eq("this is a sentence . and so is this . keep the dots .\n")
+      cleaned = WordTree::TextUtils.clean_text(sample_text, 10)
+      expect(cleaned).to eq("this is a\nsentence .\nand so is\nthis .\nkeep the\ndots .\n")
+    end
+
+    it "compresses sentence boundary punctuation and spaces" do
+      sample_text = "words . . and.. stuff"
+      cleaned = WordTree::TextUtils.clean_text(sample_text, 150)
+      expect(cleaned).to eq("words . and . stuff\n")
+    end
+  end
+
+  context "#each_ngram" do
+    it "yields ngrams in succession" do
+      sample_text = "one word\n. two\n"
+      expect{ |b| WordTree::TextUtils.each_ngram(sample_text, 1, &b) }.to \
+        yield_successive_args("one", "word", ".", "two")
+      expect{ |b| WordTree::TextUtils.each_ngram(sample_text, 2, &b) }.to \
+        yield_successive_args("one word", "word .", ". two")
+      expect{ |b| WordTree::TextUtils.each_ngram(sample_text, 3, &b) }.to \
+        yield_successive_args("one word .", "word . two")
     end
   end
 end
