@@ -59,7 +59,6 @@ describe WordTree::Disk::Librarian do
         :archive_org_id => "book",
         :year => 1800,
         :source => "test",
-        :simhash => 14921967289891934128,
         :size_bytes => 17)
       expect(updated.content).to eq("Book with content.")
     end

@@ -17,7 +17,7 @@ module WordTree
     # Size of the content in bytes
     attribute :size_bytes, Integer, :default => :content_size
     # A simhash (locality-sensitive hash) of the content
-    attribute :simhash, Integer, :default => :calculate_simhash
+    attribute :simhash, Integer
 
     attribute :content, String
 

@@ -49,7 +49,6 @@ describe WordTree::DB::Librarian do
         result = r.table('books').run(rdb).to_a
         expect(result).to eq([{
           "id" => "test",
-          "simhash" => 1318950168412674304,
           "size_bytes" => 4,
           "year" => 1800}])
       end
