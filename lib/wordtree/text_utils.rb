@@ -97,7 +97,10 @@ module WordTree
           s.unscan
         end
         # Move forward one word
-        s.scan(onegram_re)
+        if !s.scan(onegram_re)
+          # if we can't find a word, let's try to recover by scanning one char at a time
+          s.scan(/./m)
+        end
       end
     end
   end

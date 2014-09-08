@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'wordtree/text_utils'
+require 'timeout'
 
 describe WordTree::TextUtils do
   context "#split_near" do
@@ -75,6 +76,14 @@ describe WordTree::TextUtils do
         yield_successive_args("one word", "word .", ". two")
       expect{ |b| WordTree::TextUtils.each_ngram(sample_text, 3, &b) }.to \
         yield_successive_args("one word .", "word . two")
+    end
+
+    it "doesn't hang on unexpected input" do
+      sample_text = "one word\n. two \n"
+      Timeout.timeout(3) do
+        expect{ |b| WordTree::TextUtils.each_ngram(sample_text, 1, &b) }.to \
+          yield_successive_args("one", "word", ".", "two")
+      end
     end
   end
 end
