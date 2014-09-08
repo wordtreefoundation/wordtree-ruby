@@ -34,7 +34,7 @@ module WordTree
           (1..9).each do |n|
             path = library.path_to(book_id, :ngrams, :n => n)
             if File.exist?(path)
-              File.open(path) do |f|
+              File.open(path, "r:UTF-8") do |f|
                 hash = JSON.load(f)
                 book.set_ngrams(n, hash)
               end
@@ -58,7 +58,7 @@ module WordTree
       def save_ngrams(book)
         book.all_ngrams.each_pair do |n, hash|
           path = library.path_to(book.id, :ngrams, :n => n)
-          File.open(path, "w") do |file|
+          File.open(path, "w:UTF-8") do |file|
             file.write hash.to_json
           end
         end
