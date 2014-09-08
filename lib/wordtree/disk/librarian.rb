@@ -10,6 +10,8 @@ module WordTree
 
       attr_reader :library
 
+      MissingContent = Class.new(StandardError)
+
       # @library can be either a string (the path of the library) or a
       # WordTree::Disk::Library object
       def initialize(library)
@@ -52,7 +54,8 @@ module WordTree
 
       def save_without_ngrams(book)
         library.mkdir(book.id)
-        Preamble.new(book.metadata, book.content || "").save(library.path_to(book.id))
+        raise MissingContent, "book #{book.id} is missing content" unless book.content
+        Preamble.new(book.metadata, book.content).save(library.path_to(book.id))
       end
 
       def save_ngrams(book)
