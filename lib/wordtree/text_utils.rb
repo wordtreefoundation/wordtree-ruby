@@ -19,42 +19,7 @@ module WordTree
 
     # Remove punctuation an non-alphabetical characters from a text, and return
     # a cleaned-up version wrapped at +wrap+ characters per line.
-    #
-    #
-    # ** Chris' C Code Research **
-    # 
-    # most efficient way to remove special characters from string By Guffa 
-    # Credit: http://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
-    #
-    # How fast is this code?
-    #
-    # Regular expression: 294.4 ms.
-    # Original function: 54.5 ms.
-    # My suggested change: 47.1 ms.
-    # Mine with setting StringBuilder capacity: 43.3 ms.
-    # I tested the lookup+char[] solution, and it runs in about 13 ms.
-    #
-    #private static bool[] _lookup;
-    #static Program() {
-    # _lookup = new bool[65535];
-    # for (char c = '0'; c <= '9'; c++) _lookup[c] = true;
-    # for (char c = 'A'; c <= 'Z'; c++) _lookup[c] = true;
-    # for (char c = 'a'; c <= 'z'; c++) _lookup[c] = true;
-    # _lookup['.'] = true;
-    # _lookup['_'] = true;
-    #}
-    #public static string RemoveSpecialCharacters(string str) {
-    # char[] buffer = new char[str.Length];
-    # int index = 0;
-    # foreach (char c in str) {
-    #   if (_lookup[c]) {
-    #      buffer[index] = c;
-    #      index++;
-    #   }
-    # }
-    # return new string(buffer, 0, index);
-    #}
-    
+
     def self.clean_text(input, wrap=120)
       join = nil
       output = String.new
@@ -121,6 +86,40 @@ module WordTree
 
       return wrapped_output
     end
+    
+    # ** Chris' C Code Version of the above **
+    # 
+    # # Credit: "most efficient way to remove special characters from string" By Guffa 
+    # #  http://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
+    # #
+    # # How fast is this code?
+    # #
+    # # Regular expression: 294.4 ms.
+    # # Original function: 54.5 ms.
+    # # My suggested change: 47.1 ms.
+    # # Mine with setting StringBuilder capacity: 43.3 ms.
+    # # I tested the lookup+char[] solution, and it runs in about 13 ms.
+    #
+    #private static bool[] _lookup;
+    #static Program() {
+    # _lookup = new bool[65535];
+    # for (char c = '0'; c <= '9'; c++) _lookup[c] = true;
+    # for (char c = 'A'; c <= 'Z'; c++) _lookup[c] = true;
+    # for (char c = 'a'; c <= 'z'; c++) _lookup[c] = true;
+    # _lookup['.'] = true;
+    # _lookup['_'] = true;
+    #}
+    #public static string RemoveSpecialCharacters(string str) {
+    # char[] buffer = new char[str.Length];
+    # int index = 0;
+    # foreach (char c in str) {
+    #   if (_lookup[c]) {
+    #      buffer[index] = c;
+    #      index++;
+    #   }
+    # }
+    # return new string(buffer, 0, index);
+    #}    
 
     def self.each_ngram(input, n=1, &block)
       onegram_re = /([^ \n]+[ \n])/
