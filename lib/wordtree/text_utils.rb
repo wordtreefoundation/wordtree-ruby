@@ -26,6 +26,14 @@ module WordTree
     # most efficient way to remove special characters from string By Guffa 
     # Credit: http://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
     #
+    # How fast is this code?
+    #
+    # Regular expression: 294.4 ms.
+    # Original function: 54.5 ms.
+    # My suggested change: 47.1 ms.
+    # Mine with setting StringBuilder capacity: 43.3 ms.
+    # I tested the lookup+char[] solution, and it runs in about 13 ms.
+    #
     #private static bool[] _lookup;
     #static Program() {
     # _lookup = new bool[65535];
