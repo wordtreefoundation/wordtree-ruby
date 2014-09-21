@@ -19,6 +19,34 @@ module WordTree
 
     # Remove punctuation an non-alphabetical characters from a text, and return
     # a cleaned-up version wrapped at +wrap+ characters per line.
+    #
+    #
+    # ** Chris' C Code Research **
+    # 
+    # most efficient way to remove special characters from string By Guffa 
+    # Credit: http://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
+    #
+    #private static bool[] _lookup;
+    #static Program() {
+    # _lookup = new bool[65535];
+    # for (char c = '0'; c <= '9'; c++) _lookup[c] = true;
+    # for (char c = 'A'; c <= 'Z'; c++) _lookup[c] = true;
+    # for (char c = 'a'; c <= 'z'; c++) _lookup[c] = true;
+    # _lookup['.'] = true;
+    # _lookup['_'] = true;
+    #}
+    #public static string RemoveSpecialCharacters(string str) {
+    # char[] buffer = new char[str.Length];
+    # int index = 0;
+    # foreach (char c in str) {
+    #   if (_lookup[c]) {
+    #      buffer[index] = c;
+    #      index++;
+    #   }
+    # }
+    # return new string(buffer, 0, index);
+    #}
+    
     def self.clean_text(input, wrap=120)
       join = nil
       output = String.new
