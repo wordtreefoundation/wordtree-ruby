@@ -87,7 +87,7 @@ module WordTree
       return wrapped_output
     end
     
-    # ** Chris' C Code Version of the above **
+    # ** Chris' C Code Version of the above (self.clean_text)**
     # 
     # # Credit: "most efficient way to remove special characters from string" By Guffa 
     # #  http://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
@@ -138,5 +138,10 @@ module WordTree
         end
       end
     end
+    
+    # ** Chris' C Code Version of the above (self.each_ngram) **
+    # 
+    # (coming soon!)
+    
   end
 end
