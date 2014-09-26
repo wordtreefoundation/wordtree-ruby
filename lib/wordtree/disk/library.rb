@@ -61,7 +61,7 @@ module WordTree
       end
 
       def each(&block)
-        each_with_id.each{ |path, id| yield path }
+        each_with_id{ |path, id| yield path }
       end
 
     end

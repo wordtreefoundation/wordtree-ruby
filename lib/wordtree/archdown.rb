@@ -23,10 +23,8 @@ module WordTree
 
     def content_for(archivist_book)
       [archivist_book.download, nil]
-    rescue Archivist::Model::Document::UnsupportedFormat => e
-      [nil, e.to_s]
-    rescue StandardError => e
-      [nil, e.to_s]
+    rescue StandardError, Archivist::Model::Document::UnsupportedFormat => e
+      [nil, e]
     end
 
     def download_all(search_terms, &each_book)

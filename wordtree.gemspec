@@ -5,11 +5,11 @@ require 'wordtree/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "wordtree"
-  spec.version       = Wordtree::VERSION
+  spec.version       = WordTree::VERSION
   spec.authors       = ["Duane Johnson"]
   spec.email         = ["duane.johnson@gmail.com"]
   spec.description   = %q{WordTree common library code}
-  spec.summary       = %q{Wordtree common library code}
+  spec.summary       = %q{WordTree common library code}
   spec.homepage      = "https://github.com/wordtreefoundation/wordtree-ruby"
   spec.license       = "MIT"
 

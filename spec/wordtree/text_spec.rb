@@ -42,19 +42,19 @@ describe WordTree::Text do
 
     it "joins lines ending in -" do
       sample_text = "What-\never\ndo you\n mean?"
-      cleaned = WordTree::Text.clean_text(sample_text)
+      cleaned = WordTree::Text.clean(sample_text)
       expect(cleaned).to eq("whatever do you mean.")
     end
 
     it "does not ignore sentence boundaries" do
       sample_text = "This is a sentence. And so is this? Keep the dots."
-      cleaned = WordTree::Text.clean_text(sample_text)
+      cleaned = WordTree::Text.clean(sample_text)
       expect(cleaned).to eq("this is a sentence.and so is this.keep the dots.")
     end
 
     it "compresses sentence boundary punctuation and spaces" do
       sample_text = "words . . and.. stuff"
-      cleaned = WordTree::Text.clean_text(sample_text)
+      cleaned = WordTree::Text.clean(sample_text)
       expect(cleaned).to eq("words.and.stuff")
     end
   end

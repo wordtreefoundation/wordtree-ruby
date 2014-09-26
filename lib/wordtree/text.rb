@@ -1,4 +1,5 @@
 require 'strscan'
+require_relative "../../ext/wordtree"
 
 module WordTree
   module Text
@@ -19,7 +20,7 @@ module WordTree
 
     # Remove punctuation an non-alphabetical characters from a text, and return
     # a cleaned-up version wrapped at +wrap+ characters per line.
-    def self.clean_text(input, wrap=120)
+    def self.word_wrap(input, wrap=120)
       output_line = String.new
       wrapped_output = String.new
       begin

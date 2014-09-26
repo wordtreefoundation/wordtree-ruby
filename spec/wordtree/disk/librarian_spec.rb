@@ -32,12 +32,6 @@ describe WordTree::Disk::Librarian do
         expect(book.year).to eq(1800)
         expect(book.content).to eq("Book with content")
       end
-
-      it "loads ngrams if available" do
-        book = librarian.find("book")
-        expect(book).to_not receive(:count_ngrams)
-        expect(book.ngrams(1)).to eq("xyz" => 1)
-      end
     end
 
     describe "#each" do
@@ -46,43 +40,5 @@ describe WordTree::Disk::Librarian do
         expect(book_sizes).to contain_exactly(17, 23)
       end
     end
-
-    it "saves ngrams to disk" do
-      tmp_root = Dir.mktmpdir
-      tmp_library = WordTree::Disk::Library.new(tmp_root)
-      tmp_librarian = WordTree::Disk::Librarian.new(tmp_library)
-
-      book = librarian.find("book")
-      book.ngrams(1)
-      book.ngrams(2)
-
-      tmp_librarian.save(book)
-
-      ngrams_filepath = tmp_library.path_to("book", :ngrams, :n => 1)
-      expect(File.exist?(ngrams_filepath)).to be_truthy
-    end
-
-    it "saves to disk (yaml, content)" do
-      tmp_root = Dir.mktmpdir
-      tmp_library = WordTree::Disk::Library.new(tmp_root)
-      tmp_librarian = WordTree::Disk::Librarian.new(tmp_library)
-
-      book = librarian.find_without_ngrams("book")
-
-      book.source = "test"
-      book.content += "."
-
-      tmp_librarian.save(book)
-
-      updated = Preamble.load(tmp_library.path_to("book"))
-      expect(updated.metadata).to eq(
-        :id => "book",
-        :archive_org_id => "book",
-        :year => 1800,
-        :source => "test",
-        :size_bytes => 17)
-      expect(updated.content).to eq("Book with content.")
-    end
-
   end
 end

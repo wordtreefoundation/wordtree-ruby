@@ -39,13 +39,13 @@ module WordTree
       attributes.select{ |k,v| !v.nil? && k != :content }
     end
 
-    def content_clean(wrap=120)
-      if @content_clean_wrap != wrap
-        # Memoize content_clean (using last wrap size)
-        @content_clean_wrap = wrap
-        @content_clean = TextUtils.clean_text(content, wrap)
-      end
-      @content_clean
+    # Modify and clean content in-place (slightly faster)
+    def content_clean!
+      WordTree::Text.clean(content)
+    end
+
+    def content_clean
+      @content_clean ||= WordTree::Text.clean(content.dup)
     end
 
     def content_size

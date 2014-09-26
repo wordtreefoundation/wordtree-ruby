@@ -22,7 +22,7 @@ module WordTree
         end
       end
 
-      def find_without_ngrams(book_id)
+      def find(book_id)
         begin
           retrieved = Preamble.load(library.path_to(book_id), :external_encoding => "utf-8")
           Book.create(book_id, retrieved.metadata, retrieved.content)
@@ -31,46 +31,17 @@ module WordTree
         end
       end
 
-      def find(book_id)
-        find_without_ngrams(book_id).tap do |book|
-          (1..9).each do |n|
-            path = library.path_to(book_id, :ngrams, :n => n)
-            if File.exist?(path)
-              File.open(path, "r:UTF-8") do |f|
-                hash = JSON.load(f)
-                book.set_ngrams(n, hash)
-              end
-            end
-          end
-        end
-      end
-
       def each(file_suffix_re=/\.(md|txt)$/, &block)
-        library.each(file_suffix_re) do |path|
+        library.each_with_id(file_suffix_re) do |path, id|
           retrieved = Preamble.load(path, :external_encoding => "utf-8")
           yield Book.new(retrieved.metadata.merge("content" => retrieved.content))
         end
       end
 
-      def save_without_ngrams(book)
+      def save(book)
         library.mkdir(book.id)
         raise MissingContent, "book #{book.id} is missing content" unless book.content
         Preamble.new(book.metadata, book.content).save(library.path_to(book.id))
-      end
-
-      def save_ngrams(book)
-        book.all_ngrams.each_pair do |n, hash|
-          path = library.path_to(book.id, :ngrams, :n => n)
-          File.open(path, "w:UTF-8") do |file|
-            file.write hash.to_json
-          end
-        end
-      end
-
-      def save(book)
-        save_without_ngrams(book).tap do
-          save_ngrams(book)
-        end
       end
 
       def archive_org_get(*book_ids, &block)
@@ -95,6 +66,7 @@ module WordTree
             if failure
               #TODO: logging
               $stderr.puts "Unable to download from archive.org: #{failure}"
+              raise failure
             else
               book = Book.create(metadata["archive_org_id"], metadata, content)
               save(book)
