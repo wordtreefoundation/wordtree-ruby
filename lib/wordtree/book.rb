@@ -1,9 +1,8 @@
 require 'virtus'
 require 'simhash'
-require 'trie'
 require 'set'
 
-require 'wordtree/text_utils'
+require 'wordtree/text'
 
 module WordTree
   class Book
@@ -24,11 +23,8 @@ module WordTree
 
     attribute :content, String
 
-    attr_reader :ngrams
-
     def initialize(*args)
       super
-      @ngrams = Trie.new
     end
 
     def self.create(id, metadata, content)
@@ -54,29 +50,6 @@ module WordTree
 
     def content_size
       content ? content.size : nil
-    end
-
-    def each_ngram(n=1, &block)
-      TextUtils.each_ngram(content_clean, n, &block)
-    end
-
-    def ngrams_counted?(n)
-      raise ArgumentError, "Integer expected" unless n.is_a? Integer
-      ngrams_counted.include?(n)
-    end
-
-    def reset_ngram_count
-      @ngrams = Trie.new
-      @ngrams_counted = Set.new
-    end
-
-    def count_ngrams(n=1)
-      raise ArgumentError, "Integer expected" unless n.is_a? Integer
-      return if @ngrams_counted.include?(n)
-      @ngrams_counted << n
-      each_ngram(n) do |ngram|
-        @ngrams.set(ngram, (@ngrams.get(ngram) || 0) + 1)
-      end
     end
 
     def calculate_simhash
