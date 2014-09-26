@@ -1,5 +1,7 @@
 require 'virtus'
 require 'simhash'
+require 'trie'
+require 'set'
 
 require 'wordtree/text_utils'
 
@@ -18,12 +20,15 @@ module WordTree
     attribute :size_bytes, Integer, :default => :content_size
     # A simhash (locality-sensitive hash) of the content
     attribute :simhash, Integer
+    attribute :ngrams_counted, Set
 
     attribute :content, String
 
+    attr_reader :ngrams
+
     def initialize(*args)
       super
-      @ngrams = {}
+      @ngrams = Trie.new
     end
 
     def self.create(id, metadata, content)
@@ -55,26 +60,22 @@ module WordTree
       TextUtils.each_ngram(content_clean, n, &block)
     end
 
-    def set_ngrams(n, lookup)
-      raise ArgumentError, "must be a Hash" unless lookup.is_a?(Hash)
-      @ngrams[n] = lookup
+    def ngrams_counted?(n)
+      raise ArgumentError, "Integer expected" unless n.is_a? Integer
+      ngrams_counted.include?(n)
     end
 
-    def ngrams(n=1)
-      # Memoize ngram counts
-      @ngrams[n] ||= count_ngrams(n)
-    end
-
-    def all_ngrams
-      @ngrams
+    def reset_ngram_count
+      @ngrams = Trie.new
+      @ngrams_counted = Set.new
     end
 
     def count_ngrams(n=1)
-      {}.tap do |tally|
-        each_ngram(n) do |ngram|
-          tally[ngram] ||= 0
-          tally[ngram] += 1
-        end
+      raise ArgumentError, "Integer expected" unless n.is_a? Integer
+      return if @ngrams_counted.include?(n)
+      @ngrams_counted << n
+      each_ngram(n) do |ngram|
+        @ngrams.set(ngram, (@ngrams.get(ngram) || 0) + 1)
       end
     end
 

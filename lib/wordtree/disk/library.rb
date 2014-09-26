@@ -45,7 +45,7 @@ module WordTree
       end
 
       # Breadth-first search of the directory structure, operating on each book
-      def each(file_suffix_re=/\.(md|txt)$/, &block)
+      def each_with_id(file_suffix_re=/\.(md|txt)$/, &block)
         Find.find(@root) do |path|
           if FileTest.directory?(path)
             if File.basename(path)[0] == ?.
@@ -58,6 +58,10 @@ module WordTree
             yield path, LibraryLocator.id_from_path(path)
           end
         end
+      end
+
+      def each(&block)
+        each_with_id.each{ |path, id| yield path }
       end
 
     end

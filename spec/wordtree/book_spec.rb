@@ -37,26 +37,6 @@ describe WordTree::Book do
         hash = book.count_ngrams(2)
         expect(hash).to eq(two_grams)
       end
-
-      it "memoizes ngrams" do
-        expect(book).to receive(:count_ngrams).with(1).and_return(one_grams)
-        expect(book.ngrams(1)).to eq one_grams
-        expect(book).to_not receive(:count_ngrams)
-        expect(book.ngrams(1)).to eq one_grams
-      end
-    end
-
-    describe "#set_ngrams" do
-      it "sets the lookup hash" do
-        book.set_ngrams(1, {"one" => 1})
-        expect(book.ngrams(1)).to eq("one" => 1)
-        expect(book.ngrams(2)).to eq(two_grams)
-      end
-
-      it "raises an error when not a hash" do
-        expect{ book.set_ngrams(1, "string") }.to raise_error
-        expect{ book.set_ngrams(1, nil) }.to raise_error
-      end
     end
   end
 end

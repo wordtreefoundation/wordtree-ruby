@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.extensions    = %w[ext/extconf.rb]
+
   spec.add_dependency "virtus"
   spec.add_dependency "preamble", ">= 0.0.3"
   spec.add_dependency "archivist-client", ">= 0.1.7"
