@@ -33,7 +33,7 @@ describe WordTree::Text do
     end
   end
 
-  context "#clean" do
+  describe "#clean" do
     it "wraps" do
       sample_text = "This, [here]  is awesome, right"
       cleaned = WordTree::Text.clean(sample_text)
@@ -56,6 +56,92 @@ describe WordTree::Text do
       sample_text = "words . . and.. stuff"
       cleaned = WordTree::Text.clean(sample_text)
       expect(cleaned).to eq("words.and.stuff")
+    end
+  end
+
+  describe "#common_trigrams" do
+    it "returns 0 for strings of len < 3" do
+      expect(WordTree::Text.common_trigrams("")).to eq 0
+      expect(WordTree::Text.common_trigrams("1")).to eq 0
+      expect(WordTree::Text.common_trigrams("12")).to eq 0
+    end
+
+    it "returns 0 for strings without common trigrams" do
+      expect(WordTree::Text.common_trigrams("!{*@*!()}")).to eq 0
+      expect(WordTree::Text.common_trigrams("qwrtypzzx")).to eq 0
+      expect(WordTree::Text.common_trigrams("         ")).to eq 0
+    end
+
+    it "returns correct counts for strings with trigrams" do
+      expect(WordTree::Text.common_trigrams("what")).to eq 1
+      expect(WordTree::Text.common_trigrams("the wall")).to eq 2
+    end
+  end
+
+  describe "#incr_value" do
+    context "existing keys only" do
+      it "does not add keys" do
+        hash = {"hello" => 1}
+        WordTree::Text.incr_value(hash, "goodbye", nil, true)
+        expect(hash.size).to eq 1
+        expect(hash).to_not have_key("goodbye")
+      end
+
+      it "creates suffixes to existing keys" do
+        hash = {"hello" => {}}
+        WordTree::Text.incr_value(hash, "hello", :greeting, true)
+        expect(hash.size).to eq 1
+        expect(hash["hello"]).to be_a(Hash)
+        expect(hash["hello"][:greeting]).to eq 1
+      end
+
+      it "adds values for suffixes to existing keys" do
+        hash = {"hello" => {:greeting => 1}}
+        WordTree::Text.incr_value(hash, "hello", :greeting, true)
+        WordTree::Text.incr_value(hash, "hello", :other, true)
+        expect(hash.size).to eq 1
+        expect(hash["hello"]).to eq(:greeting => 2, :other => 1)
+      end
+    end
+
+    context "open ended keys" do
+      it "adds keys" do
+        hash = {}
+        WordTree::Text.incr_value(hash, "hello", nil, false)
+        expect(hash).to eq("hello" => 1)
+      end
+
+      it "adds key and suffix" do
+        hash = {}
+        WordTree::Text.incr_value(hash, "hello", :greeting, false)
+        expect(hash).to eq("hello" => {:greeting => 1})
+      end
+    end
+  end
+
+  describe "#add_ngrams_with_suffix" do
+    it "adds ngrams to a hash" do
+      hash = {}
+      text = "some text.text"
+      WordTree::Text.add_ngrams_with_suffix(text, hash, 2)
+      expect(hash).to eq(
+        "some" => 1,
+        "text" => 2,
+        "some text" => 1,
+        "text.text" => 1)
+    end
+
+    it "adds suffixes to hash of hashes" do
+      hash = {}
+      text = "some text.text"
+      WordTree::Text.add_ngrams_with_suffix(text, hash, 1, :a)
+      WordTree::Text.add_ngrams_with_suffix(text, hash, 2, :b)
+      expect(hash).to eq(
+        "some" => {:a => 1, :b => 1},
+        "text" => {:a => 2, :b => 2},
+        "some text" => {:b => 1},
+        "text.text" => {:b => 1}
+      )
     end
   end
 end

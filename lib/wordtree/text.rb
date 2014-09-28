@@ -33,5 +33,8 @@ module WordTree
       return wrapped_output
     end
 
+    def self.add_ngrams_with_suffix(text, hash, upto_n=4, suffix=nil, incr_existing_keys_only=false)
+      _add_ngrams_with_suffix(text, hash, upto_n, suffix, incr_existing_keys_only)
+    end
   end
 end
